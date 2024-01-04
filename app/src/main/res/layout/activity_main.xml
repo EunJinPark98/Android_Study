@@ -43,4 +43,13 @@
         android:layout_height="wrap_content"
         android:text="이동" />
 
+    <EditText
+        android:id="@+id/et_save"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="TextView" />
+
+
+
+
 </LinearLayout>
