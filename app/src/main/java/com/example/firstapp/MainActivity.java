@@ -5,7 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
+import android.webkit.WebChromeClient;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -22,6 +27,8 @@ public class MainActivity extends AppCompatActivity {
     EditText et_save;
     String shared = "file";
 
+    private WebView webView;
+    private String url = "https://www.naver.com";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +67,22 @@ public class MainActivity extends AppCompatActivity {
         et_save.setText(value);
 
 
+        /*웹뷰*/
+        webView = (WebView) findViewById(R.id.webView);
+        webView.getSettings().setJavaScriptEnabled(true);
+        webView.loadUrl(url);
+        webView.setWebChromeClient(new WebChromeClient());
+        webView.setWebViewClient(new WebViewClientClass());
 
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) { /*키 눌렀을 때 이벤트 정의*/
+        if((keyCode == KeyEvent.KEYCODE_BACK) && webView.canGoBack()){
+            webView.goBack();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     @Override
@@ -72,5 +94,13 @@ public class MainActivity extends AppCompatActivity {
         String value = et_save.getText().toString();
         editor.putString("eunjin", value);
         editor.commit();
+    }
+
+    private class WebViewClientClass extends WebViewClient {
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+            view.loadUrl(url);
+            return true;
+        }
     }
 }
